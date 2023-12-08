@@ -2,7 +2,7 @@ import { execQuery } from "../util/db.js";
 import bcrypt from 'bcrypt';
 
 export const getAllUsers = async () => {
-    const textQuery = 'SELECT * FROM public.users;'
+    const textQuery = 'SELECT * FROM public.users';
     const result = await execQuery(textQuery);
     return result;
 }
