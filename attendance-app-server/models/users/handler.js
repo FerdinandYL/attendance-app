@@ -10,8 +10,11 @@ import { loginUser, registerUser } from './repository.js';
 // }
 
 export const processLogin = async (req, res) => {
+    console.log("Mulai login");
+    console.log(req.body);
     try{
         const result = await loginUser(req.body);
+        console.log(result);
         res.send(result);
     } catch(e) {
         console.log(e);

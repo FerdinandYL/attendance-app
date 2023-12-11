@@ -79,7 +79,7 @@ export const registerUser = async (input) => {
     try{
         const textQuery = "INSERT INTO public.users (name, email, password, photo, role) VALUES ($1, $2, $3, $4, $5)";
         const values = [input.name, input.email, hashedPassword, input.photo, input.role];
-        // await execQuery(textQuery, values);
+        await execQuery(textQuery, values);
         return {result:"success", error:null};
     } catch(e) {
         console.log(e);
