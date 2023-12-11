@@ -1,4 +1,4 @@
-import { execQuery } from "../util/db.js";
+import { execQuery } from "../../util/db.js";
 import bcrypt from 'bcrypt';
 
 export const getAllUsers = async () => {
@@ -68,6 +68,21 @@ export const updateUser = async (input) => {
             return {result:null, error:'User not found'};
         }
     } catch(e) {
+        return {result:null, error: e};
+    }
+}
+
+export const registerUser = async (input) => {
+    // used by non-user to register themself into a user.
+    const hashedPassword = await bcrypt.hash(input.password, 10);
+    console.log(hashedPassword);
+    try{
+        const textQuery = "INSERT INTO public.users (name, email, password, photo, role) VALUES ($1, $2, $3, $4, $5)";
+        const values = [input.name, input.email, hashedPassword, input.photo, input.role];
+        // await execQuery(textQuery, values);
+        return {result:"success", error:null};
+    } catch(e) {
+        console.log(e);
         return {result:null, error: e};
     }
 }
