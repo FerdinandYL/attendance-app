@@ -1,4 +1,5 @@
 import { execQuery } from "../../util/db.js";
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 export const getAllUsers = async () => {
@@ -28,7 +29,8 @@ export const loginUser = async (input) => {
         if(result.length > 0){
             const authenticate = await bcrypt.compare(input.password, result[0].password);
             if(authenticate) {
-                return {result:result[0], error:null};
+                const token = jwt.sign({email:result[0].email, name:result[0].name},null,{expiresIn:'1m'});
+                return {result:token, error:null};
             } else {
                 return {result:null, error:'password false'};
             }

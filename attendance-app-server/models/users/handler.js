@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { loginUser, registerUser } from './repository.js';
 
 // const showLoginPage = (req, res) => {
