@@ -3,9 +3,23 @@ import { Form, redirect } from "react-router-dom";
 
 import axios from "axios";
 
-export function action(){
-    console.log(localStorage.getItem('token'));
-    return redirect('/');
+export async function action({request}){
+    const formData = Object.fromEntries(await request.formData());
+    console.log(formData);
+    await axios.post('http://localhost:3001/login', {email:formData.email, password:formData.password})
+    .then(function(response){
+        if(response.error !== undefined){
+            console.log(response.error.toString());
+        } else {
+            console.log(response.data);
+            localStorage.setItem('token', response.data.result);
+        }
+    })
+    if(localStorage.getItem('token')!==null){
+        return redirect('/');
+    } else {
+        return redirect('/login');
+    }
 }
 
 
@@ -32,20 +46,6 @@ export default function Login(){
         })
     }
 
-    async function login(){
-        await axios.post('http://localhost:3001/login', {email:user.email, password:user.password})
-        .then(function(response){
-            if(response.error !== undefined){
-                console.log(response.error);
-            } else {
-                console.log(response.data.result);
-                console.log(response.data);
-                localStorage.setItem('token', response.data.result);
-                return redirect('/')
-            }
-        })
-    }
-
     return(
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
             <div className="ui middle aligned grid" style={{width: '40vw'}}>
@@ -60,7 +60,7 @@ export default function Login(){
                             <label>Password</label>
                             <input type="password" name="password" placeholder="Password" onChange={handleChangePassword}/>
                         </div>
-                        <button className="fluid ui button positive" type="submit" onClick={login}>Submit</button>
+                        <button className="fluid ui button positive" type="submit">Submit</button>
                     </Form>
                 </div>
             </div>

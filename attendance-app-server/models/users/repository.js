@@ -29,7 +29,7 @@ export const loginUser = async (input) => {
         if(result.length > 0){
             const authenticate = await bcrypt.compare(input.password, result[0].password);
             if(authenticate) {
-                const token = jwt.sign({email:result[0].email, name:result[0].name},null,{expiresIn:'1m'});
+                const token = jwt.sign({id: result[0].id, email:result[0].email, name:result[0].name},'69',{expiresIn:'1m'});
                 return {result:token, error:null};
             } else {
                 return {result:null, error:'password false'};

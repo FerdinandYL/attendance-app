@@ -2,15 +2,17 @@ import { execQuery } from "../../util/db.js";
 
 export const checkAttendances = async (user) => {
     try{
+        console.log(user);
         const queryText = "SELECT * FROM public.attendances WHERE date = CURRENT_DATE AND usersid = $1";
         const values = [user.id];
         const result = await execQuery(queryText, values);
+        console.log(result);
         if(result.length > 0 && result[0].time_out == null){
-            return {result:'timeout', error:null};
+            return {result:{message:'timeout', response:result[0]}, error:null};
         } else if(result.length > 0 && result[0].time_out != null){
             return {result:null, error:'already fill today attendances form.'};
         } else {
-            return {result:'timein', error:null};
+            return {result:{message:'timein', response:result[0]}, error:null};
         }
     } catch(e){
         console.log(e);
@@ -24,7 +26,7 @@ export const timein = async (user) => {
         const values = [user.id];
         const result = await execQuery(queryText, values);
         if(result.length > 0){
-            return {result:'timein recorded', error:null};
+            return {result:{message:'time in recorder', time:Date.now()}, error:null};
         }
     } catch(e){
         console.log(e);

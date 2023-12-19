@@ -4,6 +4,12 @@ export const checkAttendance = async (req, res) => {
     const status = await checkAttendances(req.body);
     console.log(status.result);
     console.log(status.error);
+    res.send(status);
+}
+
+export const writeAttendances = async (req, res) => {
+    const status = await checkAttendances(req.body);
+    console.log('attending');
     if(status.result == 'timein'){
         const result = await timein(req.body);
         res.send(result);
