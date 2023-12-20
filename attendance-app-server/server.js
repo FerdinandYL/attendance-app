@@ -3,10 +3,11 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
-import userRoutes from './models/users/routes.js';
-import attendancesRoutes from './models/attendances/routes.js';
+import userRouter from './routes/userRoutes.js';
+import attendanceRouter from './routes/attendanceRoutes.js';
 
-const PORT = 3001;
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -14,10 +15,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 
-// Users
-app.use('', userRoutes);
-app.use('', attendancesRoutes);
+// Routes
+app.use('', userRouter);
+app.use('', attendanceRouter);
 
+// Start server
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`App listen to Port : ${PORT}`)
 })

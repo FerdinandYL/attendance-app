@@ -1,9 +1,8 @@
 import express from 'express';
+import { getUserDataByEmail } from '../models/user.js';
 
 const userRouter = express();
 
-userRouter.get('/dashboard', showUserDashboard);
-userRouter.get('/attendance', showUserAttendance);
-userRouter.post('/attendance', processUserAttendance);
+userRouter.post('/login', getUserDataByEmail);
 
 export default userRouter;
