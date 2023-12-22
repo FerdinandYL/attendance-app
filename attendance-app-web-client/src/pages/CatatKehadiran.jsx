@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import { jwtDecode } from "jwt-decode";
-import { useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 
 import axios from "axios";
 axios.defaults.baseURL = 'http://localhost:3001';
@@ -12,6 +12,17 @@ axios.interceptors.request.use(config => {
   }
   return config;
 });
+
+export async function action() {
+  try {
+    const token = sessionStorage.getItem('token');
+    await axios.post('http://localhost:3001/attendance', token);
+    return redirect('/kehadiran');
+  } catch (error) {
+    console.error('Error during timeIn:', error);
+    return redirect('/kehadiran');
+  }
+}
 
 export async function loader() {
   console.log('loading');
@@ -38,10 +49,11 @@ export async function loader() {
 export default function CatatKehadiran() {
 
     const response = useLoaderData();
-    console.log(response);
     const attendanceData = response.Data;
-    console.log(attendanceData);
+
     let status;
+    let showTime;
+
     if(attendanceData==null){
       status = 'timein';
     } else {
@@ -49,24 +61,15 @@ export default function CatatKehadiran() {
         status = null;
       }else if(attendanceData.time_in!=null && attendanceData.time_out==null){
         status = 'timeout';
-      }
-    }
-    console.log(status);
-    async function writeAttendance() {
-      try {
-        const token = sessionStorage.getItem('token');
-        const response = await axios.post('http://localhost:3001/attendance', token);
-        console.log(response.data.result); // Check the response and handle it accordingly
-        //ga nge redirect cuy
-      } catch (error) {
-        console.error('Error during timeIn:', error);
+        const time = new Date(attendanceData.time_in);
+        showTime = `${time.getHours()}:${time.getMinutes()}`;
       }
     }
   
     let element;
     if (status == null) {
       element = (
-        <div>
+        <Form method="post" action="/kehadiran">
           <h1>Kamu sudah presensi hari ini!</h1>
           <button className="ui disabled button" style={{ marginRight: '15px' }}>
             Mulai
@@ -74,32 +77,32 @@ export default function CatatKehadiran() {
           <button className="ui disabled button" type="disabled">
             Berhenti
           </button>
-        </div>
+        </Form>
       );
     }
     else if (status == 'timeout'){
       element = (
-        <div>
-          <h1>Kamu mencatat mulai bekerja pukul : {attendanceData.time_in}</h1>
+        <Form method="post" action="/kehadiran">
+          <h1>Kamu mencatat mulai bekerja hari ini pukul : {showTime}</h1>
           <button className="ui disabled button" type="disabled" style={{ marginRight: '15px' }}>
             Mulai
           </button>
-          <button className="ui green button" onClick={writeAttendance}>
+          <button className="ui green button" type="submit">
             Berhenti
           </button>
-        </div>
+        </Form>
       );
     } else if (status == 'timein') {
       element = (
-        <div>
+        <Form method="post" action="/kehadiran">
           <h1>Kamu belum mengisi presensi kehadiran hari ini.</h1>
-          <button className="ui green button" style={{ marginRight: '15px' }} onClick={writeAttendance}>
+          <button className="ui green button" style={{ marginRight: '15px' }} type="submit">
             Mulai
           </button>
           <button className="ui disabled button" type="disabled">
             Berhenti
           </button>
-        </div>
+        </Form>
       );
     }
     return (
