@@ -4,6 +4,8 @@ import { getUserDataByEmail } from "../models/user.js";
 import { failedResponse, successResponse } from '../util/response.js';
 import { getJWTKey } from '../util/jwt.js';
 
+// insert User jangan lupa semua di lowercasein :D
+
 export const userLogin = async (req, res) => {
     const userInput = req.body;
     const userData = await getUserDataByEmail(userInput.email);

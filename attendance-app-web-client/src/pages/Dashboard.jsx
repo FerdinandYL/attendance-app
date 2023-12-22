@@ -2,7 +2,7 @@ import {jwtDecode} from 'jwt-decode';
 import { redirect } from 'react-router-dom';
 
 export default function Dashboard(){
-    const token = jwtDecode(localStorage.getItem('token'));
+    const token = jwtDecode(sessionStorage.getItem('token'));
     const nama = token.name;
     console.log(token);
 

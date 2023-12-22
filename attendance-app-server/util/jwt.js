@@ -11,8 +11,10 @@ export const getJWTKey = (data) => {
 }
 
 export async function getDecodedToken(req) {
+
+    // jangan lupa handle token timeout biar ga error dan berenti server nya.
     try {
-        
+
         // Extract authorization header from request
         const authorizationHeader = req.headers.authorization;
 

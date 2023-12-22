@@ -41,29 +41,26 @@ export default function CatatKehadiran() {
     console.log(response);
     const attendanceData = response.Data;
     console.log(attendanceData);
-
     let status;
-
-    if(attendanceData.time_in!=null && attendanceData.time_out!=null){
-      status = null;
-    }else if(attendanceData.time_in!=null && attendanceData.time_out==null){
-      status = 'timeout';
-    }else if(attendanceData.time_in==null && attendanceData.time_out==null){
+    if(attendanceData==null){
       status = 'timein';
+    } else {
+      if(attendanceData.time_in!=null && attendanceData.time_out!=null){
+        status = null;
+      }else if(attendanceData.time_in!=null && attendanceData.time_out==null){
+        status = 'timeout';
+      }
     }
     console.log(status);
-    async function timeIn() {
+    async function writeAttendance() {
       try {
         const token = sessionStorage.getItem('token');
         const response = await axios.post('http://localhost:3001/attendance', token);
         console.log(response.data.result); // Check the response and handle it accordingly
+        //ga nge redirect cuy
       } catch (error) {
         console.error('Error during timeIn:', error);
       }
-    }
-  
-    function timeOut() {
-      // Implement timeOut functionality
     }
   
     let element;
@@ -87,7 +84,7 @@ export default function CatatKehadiran() {
           <button className="ui disabled button" type="disabled" style={{ marginRight: '15px' }}>
             Mulai
           </button>
-          <button className="ui green button" onClick={timeOut}>
+          <button className="ui green button" onClick={writeAttendance}>
             Berhenti
           </button>
         </div>
@@ -96,7 +93,7 @@ export default function CatatKehadiran() {
       element = (
         <div>
           <h1>Kamu belum mengisi presensi kehadiran hari ini.</h1>
-          <button className="ui green button" style={{ marginRight: '15px' }} onClick={timeIn}>
+          <button className="ui green button" style={{ marginRight: '15px' }} onClick={writeAttendance}>
             Mulai
           </button>
           <button className="ui disabled button" type="disabled">
