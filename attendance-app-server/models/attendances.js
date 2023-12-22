@@ -20,6 +20,7 @@ export const timeIn = async (id) => {
         const result = await execQuery(queryText, [id]);
 
         if(result.length > 0){
+            console.log('success');
             return {result:'Time in recorded', error:null};
         }
     } catch(e){

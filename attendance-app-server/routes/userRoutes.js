@@ -1,8 +1,8 @@
 import express from 'express';
-import { getUserDataByEmail } from '../models/user.js';
+import { userLogin } from '../controllers/userController.js';
 
 const userRouter = express();
 
-userRouter.post('/login', getUserDataByEmail);
+userRouter.post('/login', userLogin);
 
 export default userRouter;

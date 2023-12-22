@@ -1,13 +1,14 @@
-import { checkAttendanceStatus, timeIn } from "../models/attendances.js";
+import { checkAttendanceStatus, timeIn, timeOut } from "../models/attendances.js";
 import { successResponse } from "../util/response.js";
-import { getToken } from "../util/jwt.js";
+import { getDecodedToken } from "../util/jwt.js";
 
 import dotenv from 'dotenv';
 dotenv.config();
 
 export const getAttendanceInfo = async(req, res) => {
     // Buat dapetin jam terakhir absen
-    const user = await getToken(req);
+    const user = await getDecodedToken(req);
+    console.log(user);
     const attendanceData = await checkAttendanceStatus(user.id);
     return successResponse(res, attendanceData.result);
 }
@@ -15,7 +16,7 @@ export const getAttendanceInfo = async(req, res) => {
 export const writeUserAttendance = async(req, res) => {
 
     // Buat catat kehadiran
-    const user = await getToken(req);
+    const user = await getDecodedToken(req);
     const result = await checkAttendanceStatus(user.id);
 
     //berati belum absen, jadi timeIn.

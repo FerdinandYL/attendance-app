@@ -1,12 +1,6 @@
 import {jwtDecode} from 'jwt-decode';
 import { redirect } from 'react-router-dom';
 
-export async function action(){
-    if(localStorage.getItem('token')===null){
-        return redirect('/login');
-    }
-}
-
 export default function Dashboard(){
     const token = jwtDecode(localStorage.getItem('token'));
     const nama = token.name;

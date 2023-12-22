@@ -1,22 +1,27 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 import { getUserDataByEmail } from "../models/user.js";
 import { failedResponse, successResponse } from '../util/response.js';
+import { getJWTKey } from '../util/jwt.js';
 
 export const userLogin = async (req, res) => {
-    const userInput = {email:req.body.email, password:req.body.password};
+    const userInput = req.body;
     const userData = await getUserDataByEmail(userInput.email);
 
-    // isDataFound ?
-    if(userData.result === null) return failedResponse(res, userData.err);
+    if (userData.result === null) {
+        return failedResponse(res, userData.err);
+    }
 
-    // isPasswordMatch ?
-    const isPasswordMatch = bcrypt.compare(userInput.password, userData.result.password);
-    if(!isPasswordMatch) return failedResponse(res, "Password Wrong");
+    try {
+        const isPasswordMatch = await bcrypt.compare(userInput.password, userData.result.password);
 
-    // tokenify
-    const jwtToken = jwt.sign({id:userData.result.id, name:userData.result.name, email:userData.result.email}, '69');
-
-    return successResponse(res, jwtToken);
-}
+        if (isPasswordMatch) {
+            const token = await getJWTKey({ id: userData.result.id, name: userData.result.name, email: userData.result.email });
+            return successResponse(res, token);
+        } else {
+            return failedResponse(res, "Password Wrong");
+        }
+    } catch (error) {
+        return failedResponse(res, error);
+    }
+};

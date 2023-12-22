@@ -1,6 +1,8 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, redirect, useLoaderData } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export default function Root(){
+
     return (
         <>
             <div className="ui visible sidebar large vertical menu">
