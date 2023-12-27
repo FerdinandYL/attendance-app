@@ -35,7 +35,13 @@ const ProtectedRoutes = () => {
     if (sessionToken==null) {
         return <Navigate to="/login" replace />
     } else {
-        return <Outlet />
+        return (
+            <div style={{ marginLeft: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+                <div className="ui middle aligned center aligned grid" style={{ width: '60vw' }}>
+                <div className="column"><Outlet /></div>
+                </div>
+            </div>
+        )
     }
 }
 

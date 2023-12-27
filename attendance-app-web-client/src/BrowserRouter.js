@@ -6,6 +6,7 @@ import Dashboard, {action as DashboardAction} from './pages/Dashboard';
 import CatatKehadiran, {loader as CatatKehadiranLoader, action as CatatKehadiranAction} from './pages/CatatKehadiran';
 import ProtectedRoutes, {loader as ProtectedRoutesLoader} from './routes/ProtectedRoutes';
 import LaporanKehadiran from './pages/LaporanKehadiran';
+import AttendanceMenuPage from './pages/AttendanceMenuPage';
 
 const AppRouter = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ const AppRouter = createBrowserRouter([
                 children:[
                     {
                         index: true,
-                        element: <Dashboard/>,
+                        element: <AttendanceMenuPage/>,
                     },
                     {
                         path:'/kehadiran',
