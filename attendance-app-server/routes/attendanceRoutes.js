@@ -1,11 +1,13 @@
 import express from "express";
-import { getAttendanceInfo, writeUserAttendance } from "../controllers/attendanceController.js";
+import { attendanceDelete, getAttendanceInfo, writeUserAttendance } from "../controllers/attendanceController.js";
+import { getAttendanceById } from "../models/attendances.js";
 
 const attendanceRouter = express();
 
-// Mendapatkan info attendance terakhir.
 attendanceRouter.get('/attendance', getAttendanceInfo);
-// Mencatat info attendance.
 attendanceRouter.post('/attendance', writeUserAttendance);
+attendanceRouter.post('/attendance/detail', getAttendanceById);
+attendanceRouter.post('/attendance/delete', attendanceDelete);
+
 
 export default attendanceRouter;

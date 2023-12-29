@@ -42,3 +42,39 @@ export const timeOut = async (id) => {
         return {result:null, error: e};
     }
 }
+
+export const getAttendanceById = async (id) => {
+    try{
+        const queryText = "SELECT * FROM public.attendances WHERE id = $1";
+        const queryResult = await execQuery(queryText, [id]);
+        
+        return {result:queryResult, err:e}
+        
+    } catch(e) {
+        return {result:null, err:e};
+    }
+}
+
+export const getAttendanceByUserId = async (id) => {
+    try{
+        const queryText = "SELECT * FROM public.attendances WHERE users_id = $1";
+        const queryResult = await execQuery(queryText, [id]);
+        
+        return {result:queryResult, err:e}
+        
+    } catch(e) {
+        return {result:null, err:e};
+    }
+}
+
+export const deleteAttendance = async (id) => {
+    try{
+        const queryText = "DELETE FROM public.attendances WHERE id = $1";
+        const queryResult = await execQuery(queryText, [id]);
+        
+        return {result:'success deleting attendance', err:e}
+        
+    } catch(e) {
+        return {result:null, err:e};
+    }
+}

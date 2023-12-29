@@ -1,39 +1,71 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Root, {loader as RootLoader} from './routes/root';
-import Login, {action as LoginAction} from './pages/Login';
+
+import Dashboard from "./pages/Dashboard";
+import AttendanceMenuPage from "./pages/AttendanceMenuPage";
+import CatatKehadiran, {action as CatatKehadiranAction, loader as CatatKehadiranLoader} from "./pages/CatatKehadiran"
+
 import Error404 from './routes/error_404';
-import Dashboard, {action as DashboardAction} from './pages/Dashboard';
-import CatatKehadiran, {loader as CatatKehadiranLoader, action as CatatKehadiranAction} from './pages/CatatKehadiran';
-import ProtectedRoutes, {loader as ProtectedRoutesLoader} from './routes/ProtectedRoutes';
-import LaporanKehadiran from './pages/LaporanKehadiran';
-import AttendanceMenuPage from './pages/AttendanceMenuPage';
+import Login, {action as LoginAction} from './pages/Login';
+
+import TokenProtector, {loader as TokenProtectorLoader} from './routes/TokenProtector';
+import UserRoot, {loader as UserRootLoader} from './routes/UserRoot';
+import AdminRoot from './routes/AdminRoot';
+import SuperAdminRoot from './routes/SuperAdminRoot';
+import LaporanPage from './pages/LaporanPage';
+
 
 const AppRouter = createBrowserRouter([
     {
         path:'/',
-        element : <Root />,
-        errorElement : <Error404 />,
+        element:<TokenProtector />,
+        loader: TokenProtectorLoader,
+        errorElement: <Error404 />,
         children:[
             {
-                element:<ProtectedRoutes />,
-                loader: ProtectedRoutesLoader,
+                path:'/user',
+                loader: UserRootLoader,
+                element: <UserRoot/>,
                 children:[
                     {
-                        index: true,
-                        element: <AttendanceMenuPage/>,
+                        index:true,
+                        element:<Dashboard/>
                     },
                     {
-                        path:'/kehadiran',
-                        loader: CatatKehadiranLoader,
-                        action: CatatKehadiranAction,
+                        path:'/user/kehadiran',
+                        element:<AttendanceMenuPage/>
+                    },
+                    {
+                        path:'/user/catat',
                         element:<CatatKehadiran/>,
+                        action: CatatKehadiranAction,
+                        loader: CatatKehadiranLoader,
                     },
                     {
-                        path:'/laporan',
-                        element:<LaporanKehadiran/>,
+                        path:'/user/laporan',
+                        element:<LaporanPage/>
+                    },
+                ]
+            },
+            {
+                path:'/admin',
+                element: <AdminRoot/>,
+                children:[
+                    {
+                        index:true,
+                        element:<Dashboard/>
                     }
                 ]
-            }
+            },
+            {
+                path:'/superadmin',
+                element: <SuperAdminRoot/>,
+                children:[
+                    {
+                        index:true,
+                        element:<Dashboard/>
+                    }
+                ]
+            },
         ]
     },
     {

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function AttendanceMenuPage(){
 
     const date = new Date(Date.now());
@@ -9,7 +11,7 @@ export default function AttendanceMenuPage(){
 
     return(
         <>
-            <h1 className="ui fluid blue header">{tanggal}</h1>
+            <h1 className="ui fluid black header">{tanggal}</h1>
             <div className="ui stackable three cards">
                 <div className="ui green card">
                     <div className="content">
@@ -17,12 +19,12 @@ export default function AttendanceMenuPage(){
                             <i className="pencil alternate icon"></i>
                             <div className="content">
                             Catat Kehadiran
-                            <div className="left aligned sub header">belum</div>
+                            <div className="left aligned sub header">&nbsp;</div>
                             </div>
                         </h3>
                     </div>
                     <div className="content">
-                        <button className="ui fluid green button">Catat Kehadiran</button>
+                        <Link to='/user/catat'><button className="ui fluid green button">Catat Kehadiran</button></Link>
                     </div>
                 </div>
                 <div className="ui yellow card">

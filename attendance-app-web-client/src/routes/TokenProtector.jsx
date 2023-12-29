@@ -5,7 +5,6 @@ import { Navigate, Outlet, redirect, useLoaderData } from "react-router-dom";
 export const loader = async() => {
     const sessionToken = sessionStorage.getItem('token');
     if (sessionToken == null){
-        console.log('redirect ke /login');
         return redirect('/login')
     }  
     else {
@@ -17,28 +16,26 @@ export const loader = async() => {
                 sessionStorage.removeItem('token');
                 return redirect('/login');
             } else {
-                return sessionToken;
+                sessionStorage.setItem('user', decodedToken);
+                return decodedToken;
             }
         } catch (error) {
+            console.error(error);
             sessionStorage.removeItem('token');
             return redirect('/login');
         }
     }
 }
 
-const ProtectedRoutes = () => {
-    const sessionToken = useLoaderData();
-    if (sessionToken==null) {
+const TokenProtector = () => {
+    
+    const decodedToken = useLoaderData();
+
+    if (decodedToken==null) {
         return <Navigate to="/login" replace />
     } else {
-        return (
-            <div style={{ marginLeft: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-                <div className="ui middle aligned center aligned grid" style={{ width: '60vw' }}>
-                <div className="column"><Outlet /></div>
-                </div>
-            </div>
-        )
+        return <Outlet />;
     }
 }
 
-export default ProtectedRoutes;
+export default TokenProtector;

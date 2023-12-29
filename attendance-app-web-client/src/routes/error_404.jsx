@@ -5,8 +5,10 @@ export default function Error404(){
     console.error(error);
 
     return(
-        <div>
-            <h1>Error boss! 404</h1>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
+            <div className="ui middle aligned center aligned grid" style={{ width: '60vw' }}>
+            <div className="column"><h1 className="ui red header">Error boss! 404</h1></div>
+            </div>
         </div>
     );
 }

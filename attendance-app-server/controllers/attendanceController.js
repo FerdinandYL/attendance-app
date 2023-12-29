@@ -1,5 +1,5 @@
-import { checkAttendanceStatus, timeIn, timeOut } from "../models/attendances.js";
-import { successResponse } from "../util/response.js";
+import { checkAttendanceStatus, deleteAttendance, getAttendanceById, getAttendanceByUserId, timeIn, timeOut } from "../models/attendances.js";
+import { failedResponse, successResponse } from "../util/response.js";
 import { getDecodedToken } from "../util/jwt.js";
 
 import dotenv from 'dotenv';
@@ -29,5 +29,50 @@ export const writeUserAttendance = async(req, res) => {
     else if(result.result != null && result.err == null){ 
         const writeResult = await timeOut(user.id);
         return successResponse(res, writeResult.result);
+    }
+}
+
+export const attendanceGetById = async (req, res) => {
+    
+    const id = req.body.id;
+    try {
+        const queryResult = await getAttendanceById(id);
+        if (queryResult.err == null){
+            return successResponse(res, queryResult.result);
+        } else {
+            failedResponse(res, queryResult.err);
+        }
+    } catch (error) {
+        failedResponse(res, error);
+    }
+}
+
+export const attendanceGetByUserId = async (req, res) => {
+    
+    const id = req.body.id;
+    try {
+        const queryResult = await getAttendanceByUserId(id);
+        if (queryResult.err == null){
+            return successResponse(res, queryResult.result);
+        } else {
+            failedResponse(res, queryResult.err);
+        }
+    } catch (error) {
+        failedResponse(res, error);
+    }
+}
+
+export const attendanceDelete = async (req, res) => {
+    
+    const id = req.body.id;
+    try {
+        const queryResult = await deleteAttendance(id);
+        if (queryResult.err == null){
+            return successResponse(res, queryResult.result);
+        } else {
+            failedResponse(res, queryResult.err);
+        }
+    } catch (error) {
+        failedResponse(res, error);
     }
 }

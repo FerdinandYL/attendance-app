@@ -2,14 +2,12 @@ import React from "react";
 import { Form, redirect, useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export async function action(){
-    console.log('action jalan');
     if(sessionStorage.getItem('token') != null){
-        console.log('redirect harusnya');
-        return redirect('/');
+        return redirect('/user');
     } else {
-        console.log('error balik lagi');
         return redirect('/login');
     }
 }
@@ -46,12 +44,18 @@ export default function Login(){
             const response = await axios.post('http://localhost:3001/login', user);
     
             if(response.status !== 200){
-                console.log('error');
                 console.log(response.Message.toString());
             } else {
-                console.log('navigating');
                 sessionStorage.setItem('token', response.data.Data);
-                navigate('/', {replace:true});
+                const user = jwtDecode(response.data.Data);
+                console.log(user);
+                if(user.role == 'employee'){
+                    navigate('/user', {replace:true});
+                } else if(user.role == 'admin'){
+                    navigate('/admin', {replace:true});
+                } if(user.role == 'super_admin'){
+                    navigate('/superadmin', {replace:true});
+                }
             }
         } catch (error) {
             console.error('An error occurred during login:', error.message);

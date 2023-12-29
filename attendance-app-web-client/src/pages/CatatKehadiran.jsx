@@ -15,15 +15,14 @@ export async function action() {
   try {
     const token = sessionStorage.getItem('token');
     await axios.post('http://localhost:3001/attendance', token);
-    return redirect('/kehadiran');
+    return redirect('/user/catat');
   } catch (error) {
     console.error('Error during timeIn:', error);
-    return redirect('/kehadiran');
+    return redirect('/user/catat');
   }
 }
 
 export async function loader() {
-  console.log('loading');
   try {
     // Use a config object to pass headers and other options to Axios
     const config = {
@@ -67,7 +66,7 @@ export default function CatatKehadiran() {
     let element;
     if (status == null) {
       element = (
-        <Form method="post" action="/kehadiran">
+        <Form method="post" action="/user/catat">
           <h1>Kamu sudah presensi hari ini!</h1>
           <button className="ui disabled button" style={{ marginRight: '15px' }}>
             Mulai
@@ -80,7 +79,7 @@ export default function CatatKehadiran() {
     }
     else if (status == 'timeout'){
       element = (
-        <Form method="post" action="/kehadiran">
+        <Form method="post" action="/user/catat">
           <h1>Kamu mencatat mulai bekerja hari ini pukul : {showTime}</h1>
           <button className="ui disabled button" type="disabled" style={{ marginRight: '15px' }}>
             Mulai
@@ -92,7 +91,7 @@ export default function CatatKehadiran() {
       );
     } else if (status == 'timein') {
       element = (
-        <Form method="post" action="/kehadiran">
+        <Form method="post" action="/user/catat">
           <h1>Kamu belum mengisi presensi kehadiran hari ini.</h1>
           <button className="ui green button" style={{ marginRight: '15px' }} type="submit">
             Mulai

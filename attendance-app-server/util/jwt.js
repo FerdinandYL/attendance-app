@@ -21,7 +21,7 @@ export async function getDecodedToken(req) {
         // Extract token from authorization header
         const authtoken = authorizationHeader ? authorizationHeader.split(' ')[1] : null;
 
-        if (!authtoken) {throw new Error('No token provided')}
+        if (!authtoken) {console.error(Error('No token provided'))}
         const decodedToken = await jwtVerifyAsync(authtoken, process.env.JWT_SECRET_KEY);
 
         // Log decoded token for debugging (remove in production)
@@ -32,6 +32,6 @@ export async function getDecodedToken(req) {
         console.error("Error in getDecodedToken:", error.message);
 
         // You can customize the error handling based on your needs
-        throw new Error('Invalid token');
+        console.error(Error('Invalid token'));
     }
 }
